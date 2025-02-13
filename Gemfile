@@ -25,7 +25,10 @@ gem 'pg'
 # gem "kredis"
 
 gem 'devise'
+
 gem 'cancancan'
+
+gem 'carrierwave', '~> 0.11.2'
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
