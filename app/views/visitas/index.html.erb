@@ -1,0 +1,36 @@
+<h1>Lista de Visitas</h1>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Funcionário</th>
+      <th>Visitante</th>
+      <th>Data e Hora</th>
+      <th>Foto</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @visitas.each do |visita| %>
+      <tr>
+        <td><%= visita.funcionario.nome %></td>
+        <td><%= visita.visitante.nome %></td>
+        <td><%= visita.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+        <td>
+          <% if visita.foto.present? %>
+            <img src="<%= visita.foto %>" alt="Foto do Visitante" style="max-width: 100px;">
+          <% else %>
+            Sem foto
+          <% end %>
+        </td>
+        <td>
+          <%= link_to "Ver Detalhes", visita_path(visita) %>
+          |
+          <%= link_to "Excluir", visita_path(visita), method: :delete, data: { confirm: "Tem certeza?" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Nova Visita', new_visita_path %>

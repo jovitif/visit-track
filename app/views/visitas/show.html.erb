@@ -1,0 +1,12 @@
+<h1>Detalhes da Visita</h1>
+
+<p><strong>Funcionário:</strong> <%= @visita.funcionario.nome %></p>
+<p><strong>Visitante:</strong> <%= @visita.visitante.nome %></p>
+<p><strong>Data e Hora:</strong> <%= @visita.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+
+<% if @visita.foto.present? %>
+  <p><strong>Foto do Visitante:</strong></p>
+  <img src="<%= @visita.foto %>" alt="Foto do Visitante" style="max-width: 300px;">
+<% end %>
+
+<%= link_to 'Voltar', visitas_path %>

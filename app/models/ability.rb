@@ -1,12 +1,16 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user)
+  def initialize(user = nil)
+    # Liberar acesso para qualquer pessoa
+    can :create, Visita
+    can :read, Visita
+    
     return unless user
 
     case user.role.to_sym
     when :administrador
-      can :manage, :all # Acesso total
+      can :manage, :all
     when :atendente
       can :create, Visitante
       can :read, Visitante

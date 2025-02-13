@@ -1,0 +1,62 @@
+<%= form_for @visita, url: visitas_path, html: { multipart: true } do |f| %>
+  <div class="field">
+    <%= f.label :idfuncionario, "Funcionário" %>
+    <%= f.collection_select :idfuncionario, @funcionarios, :id, :nome, prompt: "Selecione um funcionário" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :idvisitante, "Visitante" %>
+    <%= f.collection_select :idvisitante, @visitantes, :id, :nome, prompt: "Selecione um visitante" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :foto, "Foto do visitante" %>
+    <input type="hidden" name="visita[foto]" id="foto_base64">
+    
+    <div>
+      <video id="webcam" width="320" height="240" autoplay></video>
+      <button id="capture" type="button">Capturar Foto</button>
+      <canvas id="canvas" style="display:none;"></canvas>
+      <img id="photo-preview" style="display:none; width: 320px; height: 240px;">
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Registrar Visita" %>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('canvas');
+    const captureButton = document.getElementById('capture');
+    const photoPreview = document.getElementById('photo-preview');
+    const fotoBase64 = document.getElementById('foto_base64');
+
+    // Solicita permissão para acessar a webcam
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function(stream) {
+        video.srcObject = stream;
+      })
+      .catch(function(err) {
+        console.error("Erro ao acessar a webcam: ", err);
+      });
+
+    // Captura a foto e converte para base64
+    captureButton.addEventListener('click', function() {
+      const context = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Converte para base64 e preenche o campo oculto
+      const imageData = canvas.toDataURL('image/png');
+      fotoBase64.value = imageData;
+      
+      // Exibe a prévia da foto capturada
+      photoPreview.src = imageData;
+      photoPreview.style.display = 'block';
+    });
+  });
+</script>

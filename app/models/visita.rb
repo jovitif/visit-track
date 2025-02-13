@@ -1,3 +1,5 @@
 class Visita < ApplicationRecord
-    mount_uploader :foto, FotoUploader
+    belongs_to :funcionario, class_name: 'User', foreign_key: 'idfuncionario'
+    belongs_to :visitante, class_name: 'User', foreign_key: 'idvisitante'
+    validates :foto, presence: true
 end
