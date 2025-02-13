@@ -1,7 +1,7 @@
 class User < ApplicationRecord
-  attribute :role, :integer, default: 1
+  attribute :role, :integer, default: 3
 
-  enum role: { administrador: 0, atendente: 1, funcionario: 2 }
+  enum role: { administrador: 0, atendente: 1, funcionario: 2, visitante: 3 }
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable

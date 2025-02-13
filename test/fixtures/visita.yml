@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  idfuncionario: 1
+  idvisitante: 1
+  foto: MyString
+
+two:
+  idfuncionario: 1
+  idvisitante: 1
+  foto: MyString
