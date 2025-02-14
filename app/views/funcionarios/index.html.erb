@@ -1,0 +1,26 @@
+<!-- app/views/funcionarios/index.html.erb -->
+
+<h1>Funcionários</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Email</th>
+      <th>CPF</th>
+      <th>Telefone</th>
+      <th>Função</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @funcionarios.each do |funcionario| %>
+      <tr>
+        <td><%= funcionario.nome %></td>
+        <td><%= funcionario.email %></td>
+        <td><%= funcionario.cpf %></td>
+        <td><%= funcionario.telefone %></td>
+        <td><%= funcionario.role %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

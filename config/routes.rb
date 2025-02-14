@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  get 'administrador_dashboard', to: 'dashboards#administrador'
+  get 'atendente_dashboard', to: 'dashboards#atendente'
+  get 'funcionario_dashboard', to: 'dashboards#funcionario'
+  get 'visitante_dashboard', to: 'dashboards#visitante'
+  resources :unidades
+  resources :setores
+  resources :funcionarios
+  resources :usuarios
+  # Outras rotas do Devise
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :visitas

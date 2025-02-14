@@ -1,0 +1,26 @@
+<!-- app/views/usuarios/index.html.erb -->
+
+<h1>Usuários</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Email</th>
+      <th>CPF</th>
+      <th>Telefone</th>
+      <th>Função</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @usuarios.each do |usuario| %>
+      <tr>
+        <td><%= usuario.nome %></td>
+        <td><%= usuario.email %></td>
+        <td><%= usuario.cpf %></td>
+        <td><%= usuario.telefone %></td>
+        <td><%= usuario.role %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
