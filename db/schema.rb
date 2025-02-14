@@ -10,9 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_13_185434) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_13_234607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "setores_funcionarios", id: false, force: :cascade do |t|
+    t.bigint "setor_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["setor_id"], name: "index_setores_funcionarios_on_setor_id"
+    t.index ["user_id"], name: "index_setores_funcionarios_on_user_id"
+  end
+
+  create_table "setors", force: :cascade do |t|
+    t.string "nome", null: false
+    t.text "descricao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -38,4 +52,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_13_185434) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "setores_funcionarios", "setors"
+  add_foreign_key "setores_funcionarios", "users"
 end

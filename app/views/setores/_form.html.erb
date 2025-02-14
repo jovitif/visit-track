@@ -1,0 +1,20 @@
+<%= form_with(model: @setor, url: setores_path) do |f| %>
+  <div>
+    <%= f.label :nome %>
+    <%= f.text_field :nome, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :descricao %>
+    <%= f.text_area :descricao, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :funcionario_ids, "Funcionários" %>
+    <%= f.collection_select :funcionario_ids, User.where(role: :funcionario), :id, :nome, {}, multiple: true %>
+  </div>
+
+  <div>
+    <%= f.submit "Salvar Setor" %>
+  </div>
+<% end %>

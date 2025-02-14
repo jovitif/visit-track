@@ -8,4 +8,6 @@ class User < ApplicationRecord
 
   validates :nome, presence: true
   validates :cpf, presence: true, uniqueness: true
+
+  has_and_belongs_to_many :setores, join_table: 'setores_funcionarios'
 end
