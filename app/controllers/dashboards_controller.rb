@@ -3,20 +3,25 @@ class DashboardsController < ApplicationController
     before_action :check_role # Verifica a role antes de acessar o painel
   
     def administrador
+      puts 'admin'
       # Adicione aqui qualquer lógica necessária para o painel do administrador
       # Exemplo: Carregar informações dos usuários, estatísticas, etc.
       @users = User.all # Exemplo: Carregar todos os usuários
     end
   
     def atendente
+      puts 'atendente'
       # Lógica para o painel de atendente
     end
   
     def funcionario
-      # Lógica para o painel de funcionário
+      puts 'funcionario'
+      # Busca as visitas agendadas para o funcionário atual (que ainda não foram confirmadas)
+      @visitas = Visita.where(idfuncionario: current_user.id, confirmado: [false, nil]).order(created_at: :desc)
     end
   
     def visitante
+      puts 'visitante'
       # Lógica para o painel de visitante
     end
   

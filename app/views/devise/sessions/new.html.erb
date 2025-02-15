@@ -1,26 +1,90 @@
-<h2>Log in</h2>
+<style>
+  body {
+    background-color: #0C0F17;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    padding-top: 50px;
+  }
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  .login-container {
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+    display: inline-block;
+    width: 320px;
+  }
+
+  .field label {
+    color: #f0f0f0;
+  }
+
+  .actions input {
+    background-color: #1D202B;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .actions input:hover {
+    background-color: #FC1855;
+  }
+
+  .label-gray {
+    color: gray;
+  }
+  
+  .input-underline {
+    border: none;
+    border-bottom: 1px solid #000; /* Linha preta embaixo */
+    outline: none; /* Remove a borda padrão ao focar */
+    background-color: transparent; /* Garante que o fundo seja transparente */
+    padding: 8px 0; /* Ajuste o preenchimento para alinhar o texto corretamente */
+    width: 100%; /* Garante que o campo ocupe toda a largura disponível */
+    color: white; 
+  }
+  
+  .input-underline:focus {
+    border-bottom: 2px solid #FC1855; /* Cor do fundo da linha quando o campo estiver em foco */
+    box-shadow: none; /* Remove qualquer sombra padrão */
+  }
+  
+</style>
+
+<%= image_tag "logo.png", alt: "Logo", width: "150" if Rails.application.assets.find_asset("logo.png") %>
+
+<div class="login-container">
+  <h2>Log in</h2>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
   <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= f.label :email, class: "label-gray" %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-underline" %>
   </div>
 
   <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
+    <%= f.label :password, class: "label-gray" %><br />
+    <%= f.password_field :password, autocomplete: "current-password", class: "input-underline" %>
   </div>
 
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
-    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div class="field">
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me %>
+      </div>
+    <% end %>
+
+   <div class="actions">
+  <%= f.submit "Entrar" %>
+</div>
   <% end %>
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
+<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+  <%= link_to "Esqueceu sua senha?", new_password_path(resource_name), style: "color: #FC1855; text-decoration: none;" %><br />
 <% end %>
 
-<%= render "devise/shared/links" %>
+</div>

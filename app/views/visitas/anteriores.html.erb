@@ -1,0 +1,26 @@
+<h1>Visitas Anteriores</h1>
+
+<% if @visitas.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Visitante</th>
+        <th>Data/Hora de Chegada</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @visitas.each do |visita| %>
+        <tr>
+          <td><%= visita.visitante.nome %></td>
+          <td><%= visita.created_at.strftime('%d/%m/%Y %H:%M') %></td>
+          <td>
+            <span style="color: green;">Confirmada</span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>Não há visitas anteriores confirmadas.</p>
+<% end %>

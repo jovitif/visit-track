@@ -1,0 +1,11 @@
+<h1>Lista de Unidades</h1>
+
+<%= link_to 'Nova Unidade', new_unidade_path, class: 'btn btn-primary' %>
+
+<ul>
+  <% @unidades.each do |unidade| %>
+    <li>
+      <strong><%= unidade.nome %></strong> - <%= unidade.descricao %>
+    </li>
+  <% end %>
+</ul>

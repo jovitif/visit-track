@@ -10,4 +10,7 @@ class User < ApplicationRecord
   validates :cpf, presence: true, uniqueness: true
 
   has_and_belongs_to_many :setores, join_table: 'setores_funcionarios'
+
+  belongs_to :unidade, optional: true
+
 end

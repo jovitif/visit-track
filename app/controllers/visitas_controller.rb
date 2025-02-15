@@ -2,6 +2,8 @@ require 'base64'
 require 'securerandom'
 
 class VisitasController < ApplicationController
+  before_action :set_visita, only: [:confirmar]
+
 
   def index
     @visitas = Visita.includes(:funcionario, :visitante).order(created_at: :desc)
@@ -9,14 +11,13 @@ class VisitasController < ApplicationController
   
   def new
     @visita = Visita.new
-    @funcionarios = User.where(role: :funcionario)  # Busca usuários com role 'funcionario'
-    @visitantes = User.where(role: :visitante)      # Busca usuários com role 'visitante'
+    @funcionarios = User.where(role: :funcionario)  
+    @visitantes = User.where(role: :visitante)      
   end
   
   def create
     @visita = Visita.new(visita_params)
 
-    # Se houver uma foto em Base64, convertemos para um arquivo real
     if params[:visita][:foto].present?
       @visita.foto = salvar_foto_base64(params[:visita][:foto])
     end
@@ -32,30 +33,41 @@ class VisitasController < ApplicationController
     @visita = Visita.find(params[:id])
   end
 
-  private
+  def confirmar
+    if @visita
+      @visita.update(confirmado: true)
+      redirect_to dashboard_funcionario_path, notice: 'Visita confirmada com sucesso!'
+    else
+      redirect_to dashboard_funcionario_path, alert: 'Erro: Visita não encontrada.'
+    end
+  end
 
+  def anteriores
+    # Buscar visitas confirmadas do funcionário atual
+    @visitas = Visita.where(funcionario_id: current_user.id, confirmado: true).order(created_at: :desc)
+  end
+ 
+  private
+  def set_visita
+    @visita = Visita.find_by(id: params[:id]) # Use find_by para evitar exceção se o ID não existir
+  end
   def visita_params
     params.require(:visita).permit(:idfuncionario, :idvisitante)
   end
 
   def salvar_foto_base64(base64_str)
-    # Decodifica a string Base64
     data_uri = base64_str.split(',')[1]
     decoded_image = Base64.decode64(data_uri)
   
-    # Define o caminho e o nome do arquivo
     file_name = "foto_#{SecureRandom.uuid}.png"
     file_path = Rails.root.join('public', 'uploads', file_name)
   
-    # Garante que o diretório 'public/uploads' exista
     FileUtils.mkdir_p(File.dirname(file_path))
   
-    # Salva o arquivo
     File.open(file_path, 'wb') do |file|
       file.write(decoded_image)
     end
   
-    # Retorna o caminho relativo para salvar no banco
     "/uploads/#{file_name}"
   end
 end
