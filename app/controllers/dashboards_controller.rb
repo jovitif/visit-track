@@ -11,8 +11,11 @@ class DashboardsController < ApplicationController
   
     def atendente
       puts 'atendente'
-      # Lógica para o painel de atendente
-    end
+      @visitas = Visita.joins(:funcionario)
+      .where(users: { unidade_id: current_user.unidade_id })
+      .order(created_at: :desc)
+      render "visitas/index"
+    end    
   
     def funcionario
       puts 'funcionario'

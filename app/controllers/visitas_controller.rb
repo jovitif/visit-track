@@ -3,7 +3,8 @@ require 'securerandom'
 
 class VisitasController < ApplicationController
   before_action :set_visita, only: [:confirmar]
-
+  before_action :authenticate_user!
+  before_action :ensure_atendente
 
   def index
     @visitas = Visita.includes(:funcionario, :visitante).order(created_at: :desc)
@@ -11,9 +12,9 @@ class VisitasController < ApplicationController
   
   def new
     @visita = Visita.new
-    @funcionarios = User.where(role: :funcionario)  
+    @setores = current_user.unidade.setors if current_user&.unidade
     @visitantes = User.where(role: :visitante)      
-  end
+  end  
   
   def create
     @visita = Visita.new(visita_params)
@@ -48,6 +49,10 @@ class VisitasController < ApplicationController
   end
  
   private
+  def ensure_atendente
+    redirect_to root_path, alert: "Acesso negado." unless current_user.atendente?
+  end
+
   def set_visita
     @visita = Visita.find_by(id: params[:id]) # Use find_by para evitar exceção se o ID não existir
   end

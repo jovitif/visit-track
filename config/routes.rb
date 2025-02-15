@@ -3,7 +3,12 @@ Rails.application.routes.draw do
   get 'atendente_dashboard', to: 'dashboards#atendente'
   get 'funcionario_dashboard', to: 'dashboards#funcionario'
   get 'visitante_dashboard', to: 'dashboards#visitante'
-
+  resources :setores do
+    member do
+      get 'funcionarios'
+    end
+  end
+  
   resources :unidades
   resources :setores
   resources :funcionarios
@@ -31,10 +36,9 @@ Rails.application.routes.draw do
 
   # Rotas para o dashboard
   get 'dashboard/administrador', to: 'dashboards#administrador'
-  get 'dashboard/atendente',     to: 'dashboards#atendente'
+  get 'dashboard/atendente', to: 'dashboards#atendente'
   get 'dashboard/funcionario',   to: 'dashboards#funcionario'
   get 'dashboard/visitante',     to: 'dashboards#visitante'
-
 
   # Defines the root path route ("/")
   # root "posts#index"

@@ -41,7 +41,13 @@ class SetoresController < ApplicationController
   def show
     @setor = Setor.find(params[:id])
   end
-
+  def funcionarios
+    @setor = Setor.find(params[:id])
+    @funcionarios = @setor.funcionarios
+    respond_to do |format|
+      format.json { render json: @funcionarios.select(:id, :nome) }
+    end
+  end
   private
 
   def set_setor
