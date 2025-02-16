@@ -1,20 +1,39 @@
 <%= form_for @visita, url: visitas_path, html: { multipart: true } do |f| %>
- <div class="field">
+  <div class="field">
   <%= label_tag :setor, "Setor" %>
-  <%= select_tag :setor, options_from_collection_for_select(@setors, :id, :nome), 
-    prompt: "Selecione um setor", id: "setor_select" %>
+  <%= select_tag :setor, options_from_collection_for_select(@setors || [], :id, :nome), prompt: "Selecione um setor", id: "setor_select" %>
 </div>
 
-<div class="field">
-  <%= f.label :idfuncionario, "Funcionário" %>
-  <%= f.collection_select :idfuncionario, [], :id, :nome, prompt: "Selecione um funcionário", id: "funcionario_select" %>
-</div>
+  
 
+  <!-- Seleção do Funcionário -->
+  <div class="field">
+    <%= f.label :idfuncionario, "Funcionário" %>
+    <%= select_tag :idfuncionario, options_for_select([], prompt: "Selecione um funcionário"), id: "funcionario_select" %>
+  </div>
 
-  <!-- Seleção do Visitante -->
+  <!-- Formulário para cadastro do Visitante -->
   <div class="field">
     <%= f.label :idvisitante, "Visitante" %>
-    <%= f.collection_select :idvisitante, @visitantes, :id, :nome, prompt: "Selecione um visitante" %>
+    <!-- Campos para criar novo visitante -->
+    <%= f.fields_for :visitante do |visitante_form| %>
+       <div class="field">
+        <%= visitante_form.label :cpf, "CPF" %>
+        <%= visitante_form.text_field :cpf, placeholder: "CPF do Visitante", required: true %>
+      </div>
+      
+      <div class="field">
+        <%= visitante_form.label :nome, "Nome" %>
+        <%= visitante_form.text_field :nome, placeholder: "Nome do Visitante", required: true %>
+      </div>
+
+     
+
+      <div class="field">
+        <%= visitante_form.label :telefone, "Telefone" %>
+        <%= visitante_form.text_field :telefone, placeholder: "Telefone do Visitante", required: true %>
+      </div>
+    <% end %>
   </div>
 
   <!-- Captura de Foto -->
@@ -30,35 +49,41 @@
   </div>
 
   <div class="actions">
-    <%= f.submit "Registrar Visita 2" %>
+    <%= f.submit "Registrar Visita" %>
   </div>
 <% end %>
 
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  // Configuração da webcam (já existente)
+  // Referências aos elementos da página
+  const setorSelect = document.getElementById("setor_select");
+  const funcionarioSelect = document.getElementById("funcionario_select");
   const video = document.getElementById('webcam');
   const canvas = document.getElementById('canvas');
   const captureButton = document.getElementById('capture');
   const photoPreview = document.getElementById('photo-preview');
   const fotoBase64 = document.getElementById('foto_base64');
 
-  // Lógica para atualizar o campo de Funcionário com base no Setor selecionado
-  const setorSelect = document.getElementById("setor_select");
-  const funcionarioSelect = document.getElementById("funcionario_select");
-
+  // Carregar funcionários quando o setor for alterado
   setorSelect.addEventListener("change", function() {
     let setorId = this.value;
-    // Limpa as opções atuais
-    funcionarioSelect.innerHTML = '<option value="">Selecione um funcionário</option>';
+    console.log("Setor selecionado ID:", setorId, "Tipo:", typeof setorId);
+    console.log("Entrando no IF?", Boolean(setorId));
 
-    if (setorId) {
-      // Faz uma requisição para buscar os funcionários do setor (retorno em JSON)
+    if (funcionarioSelect) 
+      funcionarioSelect.innerHTML = '<option value="">Selecione um funcionário</option>';
+    if (Boolean(setorId)) { // Converte para número e verifica
+      console.log('setor encontrado');
       fetch(`/visitas/load_funcionarios?setor_id=${setorId}`)
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) throw new Error("Erro ao carregar funcionários.");
+          return response.json();
+        })
         .then(data => {
-          if (data.length > 0) {
-            // Para cada funcionário, cria uma nova opção no select
+          console.log("Funcionários recebidos:", data);
+
+          if (data.length > 0 && funcionarioSelect) { // Verificando se funcionarioSelect não é null
             data.forEach(funcionario => {
               let option = document.createElement("option");
               option.value = funcionario.id;
@@ -66,32 +91,27 @@ document.addEventListener("DOMContentLoaded", function() {
               funcionarioSelect.appendChild(option);
             });
           } else {
-            // Caso não haja funcionários, adiciona uma opção indicando isso
-            let option = document.createElement("option");
-            option.value = "";
-            option.textContent = "Nenhum funcionário encontrado";
-            funcionarioSelect.appendChild(option);
+            if (funcionarioSelect) {
+              funcionarioSelect.innerHTML = '<option value="">Nenhum funcionário encontrado</option>';
+            }
           }
         })
-        .catch(error => console.error("Erro ao buscar funcionários: ", error));
+        .catch(error => console.error("Erro ao buscar funcionários:", error));
     }
   });
 
-  // Configuração da webcam
+  // Ativar webcam
   navigator.mediaDevices.getUserMedia({ video: true })
-    .then(function(stream) {
-      video.srcObject = stream;
-    })
-    .catch(function(err) {
-      console.error("Erro ao acessar a webcam: ", err);
-    });
+    .then(stream => video.srcObject = stream)
+    .catch(err => console.error("Erro ao acessar a webcam:", err));
 
-  // Captura de foto
+  // Captura de foto do visitante
   captureButton.addEventListener('click', function() {
     const context = canvas.getContext('2d');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
     const imageData = canvas.toDataURL('image/png');
     fotoBase64.value = imageData;
     photoPreview.src = imageData;

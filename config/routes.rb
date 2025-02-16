@@ -10,7 +10,8 @@ Rails.application.routes.draw do
       get 'funcionarios'
     end
   end
-  
+  get '/setores_por_unidade/:unidade_id', to: 'setores#por_unidade'
+
   resources :unidades
   resources :setores
   resources :funcionarios
@@ -18,27 +19,10 @@ Rails.application.routes.draw do
   # Outras rotas do Devise
   devise_for :users
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  resources :visitas
-  resources :setores, path: 'setores'
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
-
-  # Render dynamic PWA files from app/views/pwa/*
-  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  get 'visitas/load_funcionarios', to: 'visitas#load_funcionarios'
-
+  # Rotas para visitas
   resources :visitas do
     collection do
-      get 'load_funcionarios' # Ação que carrega os funcionários por setor
-    end
-  end
-
-  
-  resources :visitas do
-    collection do
+      get :load_funcionarios
       get 'anteriores'  # Rota para visitas anteriores
     end
     member do

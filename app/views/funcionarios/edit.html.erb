@@ -1,0 +1,70 @@
+<h1>Editar Funcionario</h1>
+
+<%= form_with(model: @usuario, url: funcionario_path(@usuario), local: true, method: :patch) do |f| %>
+  <div>
+    <%= f.label :nome, "Nome" %><br>
+    <%= f.text_field :nome %>
+  </div>
+  
+  <div>
+    <%= f.label :email, "Email" %><br>
+    <%= f.email_field :email %>
+  </div>
+  
+  <div>
+    <%= f.label :cpf, "CPF" %><br>
+    <%= f.text_field :cpf %>
+  </div>
+
+  <div>
+    <%= f.label :telefone, "Telefone" %><br>
+    <%= f.text_field :telefone %>
+  </div>
+
+  <% if @usuario.role == "atendente" %>
+    <div>
+      <%= f.label :unidade_id, "Unidade" %><br>
+      <%= f.collection_select :unidade_id, Unidade.all, :id, :nome, prompt: "Selecione a unidade" %>
+    </div>
+
+  <% elsif @usuario.role == "funcionario" %>
+    <div>
+      <%= f.label :unidade_id, "Unidade" %><br>
+      <%= f.collection_select :unidade_id, Unidade.all, :id, :nome, { prompt: "Selecione a unidade" }, { id: "unidade_select" } %>
+    </div>
+
+    <div>
+      <%= f.label :setor_id, "Setor" %><br>
+      <%= f.collection_select :setor_id, @setores, :id, :nome, { prompt: "Selecione o setor" }, { id: "setor_select" } %>
+    </div>
+  <% else %>
+    <p>Usuários do tipo <%= @usuario.role %> não podem ser editados.</p>
+  <% end %>
+
+  <% if @usuario.role.in?(["atendente", "funcionario"]) %>
+    <div>
+      <%= f.submit "Salvar", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+<% end %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("unidade_select").addEventListener("change", function() {
+      let unidadeId = this.value;
+      
+      fetch(`/setores_por_unidade/${unidadeId}`)
+        .then(response => response.json())
+        .then(data => {
+          let setorSelect = document.getElementById("setor_select");
+          setorSelect.innerHTML = "<option value=''>Selecione o setor</option>";
+          data.forEach(setor => {
+            let option = document.createElement("option");
+            option.value = setor.id;
+            option.textContent = setor.nome;
+            setorSelect.appendChild(option);
+          });
+        });
+    });
+  });
+</script>

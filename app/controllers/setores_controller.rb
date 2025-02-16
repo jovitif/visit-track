@@ -35,6 +35,11 @@ class SetoresController < ApplicationController
     end
   end
 
+  def por_unidade
+    setores = Setor.where(unidade_id: params[:unidade_id])
+    render json: setores
+  end
+  
   def destroy
     @setor.destroy
     redirect_to setores_path, notice: 'Setor excluído com sucesso!'
