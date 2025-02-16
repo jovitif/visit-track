@@ -12,10 +12,12 @@ class VisitasController < ApplicationController
   
   def new
     @visita = Visita.new
-    @setores = current_user.unidade.setors if current_user&.unidade
-    @visitantes = User.where(role: :visitante)      
-  end  
+    # Carrega os setores da unidade do usuário logado
+    @setors = current_user.unidade.present? ? current_user.unidade.setors : []
+    @visitantes = User.where(role: :visitante) # ou conforme sua lógica
+  end
   
+
   def create
     @visita = Visita.new(visita_params)
 
@@ -46,6 +48,16 @@ class VisitasController < ApplicationController
   def anteriores
     # Buscar visitas confirmadas do funcionário atual
     @visitas = Visita.where(funcionario_id: current_user.id, confirmado: true).order(created_at: :desc)
+  end
+
+   # Ação que retorna os funcionários de um setor
+   def load_funcionarios
+    setor_id = params[:setor_id]
+    # Encontre os funcionários que pertencem ao setor selecionado
+    funcionarios = User.where(setor_id: setor_id).where(role: 'funcionario')
+
+    # Retorne os funcionários em formato JSON
+    render json: funcionarios.map { |f| { id: f.id, nome: f.nome } }
   end
  
   private

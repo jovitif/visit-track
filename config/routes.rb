@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get 'atendente_dashboard', to: 'dashboards#atendente'
   get 'funcionario_dashboard', to: 'dashboards#funcionario'
   get 'visitante_dashboard', to: 'dashboards#visitante'
+  get '/funcionarios', to: 'funcionarios#index'
+
   resources :setores do
     member do
       get 'funcionarios'
@@ -15,6 +17,7 @@ Rails.application.routes.draw do
   resources :usuarios
   # Outras rotas do Devise
   devise_for :users
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :visitas
   resources :setores, path: 'setores'
@@ -25,6 +28,15 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  get 'visitas/load_funcionarios', to: 'visitas#load_funcionarios'
+
+  resources :visitas do
+    collection do
+      get 'load_funcionarios' # Ação que carrega os funcionários por setor
+    end
+  end
+
+  
   resources :visitas do
     collection do
       get 'anteriores'  # Rota para visitas anteriores

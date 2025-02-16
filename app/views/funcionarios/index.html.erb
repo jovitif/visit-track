@@ -1,5 +1,3 @@
-<!-- app/views/funcionarios/index.html.erb -->
-
 <h1>Funcionários</h1>
 
 <table>
@@ -10,17 +8,67 @@
       <th>CPF</th>
       <th>Telefone</th>
       <th>Função</th>
+      <th>Ações</th>
     </tr>
   </thead>
   <tbody>
-    <% @funcionarios.each do |funcionario| %>
+    <% @usuarios.each do |usuario| %>
       <tr>
-        <td><%= funcionario.nome %></td>
-        <td><%= funcionario.email %></td>
-        <td><%= funcionario.cpf %></td>
-        <td><%= funcionario.telefone %></td>
-        <td><%= funcionario.role %></td>
+        <td><%= usuario.nome %></td>
+        <td><%= usuario.email %></td>
+        <td><%= usuario.cpf %></td>
+        <td><%= usuario.telefone %></td>
+        <td><%= usuario.role %></td>
+        <td>
+          <%= link_to 'Editar', edit_usuario_path(usuario), class: 'btn btn-warning' %>
+          <%= link_to 'Excluir', usuario_path(usuario), method: :delete, data: { confirm: 'Tem certeza que deseja excluir este usuário?' }, class: 'btn btn-danger' %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f4f4f4;
+  }
+
+  .btn {
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-right: 5px;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .btn-warning {
+    background-color: #ffc107;
+    color: black;
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .btn:hover {
+    opacity: 0.8;
+  }
+</style>

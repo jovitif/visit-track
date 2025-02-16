@@ -1,3 +1,18 @@
+<% if current_user && current_user.unidade.present? %>
+  <h2>Unidade: <%= current_user.unidade.nome %></h2>
+
+  <% if current_user.unidade.setors.any? %>
+    <h3>Setores Disponíveis:</h3>
+    <ul>
+      <% current_user.unidade.setors.each do |setor| %>
+        <li><%= setor.nome %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>Não há setores cadastrados para a sua unidade.</p>
+  <% end %>
+<% end %>
+
 <h1>Lista de Visitas</h1>
 
 <table border="1">
@@ -35,8 +50,4 @@
 
 <%= link_to 'Nova Visita', new_visita_path %>
 
-<!-- Link para logout -->
-<!-- Usando link_to com método delete -->
-<%= link_to "Sair", destroy_user_session_path, 
-    data: { turbo_method: :delete, confirm: "Tem certeza que deseja sair?" } %>
 

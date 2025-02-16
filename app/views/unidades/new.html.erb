@@ -11,12 +11,6 @@
     <%= form.text_area :descricao %>
   </div>
 
-  <!-- Campo para selecionar setores -->
-  <div>
-  <%= form.label :setor_ids, "Setores" %>
-  <%= form.collection_select :setor_ids, Setor.all, :id, :nome, { prompt: "Selecione os Setores" }, { multiple: true } %>
-</div>
-
   <div>
     <%= form.submit 'Criar Unidade', class: 'btn btn-success' %>
   </div>

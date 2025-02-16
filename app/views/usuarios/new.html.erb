@@ -1,0 +1,41 @@
+<h1>Cadastrar Novo Usuário 2</h1>
+
+<%= form_for(resource, url: user_registration_path) do |f| %>
+  <div>
+    <%= f.label :nome %>
+    <%= f.text_field :nome %>
+  </div>
+
+  <div>
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+  </div>
+
+  <div>
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+  </div>
+
+  <div>
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation %>
+  </div>
+
+  <div>
+    <%= f.label :cpf %>
+    <%= f.text_field :cpf %>
+  </div>
+
+  <div>
+    <%= f.label :telefone %>
+    <%= f.text_field :telefone %>
+  </div>
+
+  <div>
+  <%= f.label :role, "Função" %>
+  <%= f.select :role, User.roles.keys.reject { |role| role == 'visitante' }.map { |role| [role.humanize, role] } %>
+</div>
+
+
+  <%= f.submit "Cadastrar Usuário" %>
+<% end %>

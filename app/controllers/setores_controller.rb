@@ -15,11 +15,13 @@ class SetoresController < ApplicationController
   def create
     @setor = Setor.new(setor_params)
     if @setor.save
-      redirect_to setores_path, notice: 'Setor criado com sucesso!'  # Redireciona para a lista de setores
+      redirect_to setores_path, notice: 'Setor criado com sucesso!'
     else
+      puts @setor.errors.full_messages # Adicionando um debug
       render :new
     end
   end
+  
   
 
   def edit
@@ -55,6 +57,7 @@ class SetoresController < ApplicationController
   end
 
   def setor_params
-    params.require(:setor).permit(:nome, :descricao, funcionario_ids: [])
+    params.require(:setor).permit(:nome, :descricao, :unidade_id)
   end
+  
 end

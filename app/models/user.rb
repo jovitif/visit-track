@@ -14,4 +14,5 @@ class User < ApplicationRecord
   belongs_to :unidade, optional: true
   belongs_to :setor, optional: true 
 
+  
 end

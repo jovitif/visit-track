@@ -1,15 +1,15 @@
 <%= form_for @visita, url: visitas_path, html: { multipart: true } do |f| %>
-  <!-- Seleção do Setor -->
-  <div class="field">
-    <%= label_tag :setor, "Setor" %>
-<%= select_tag :setor, options_from_collection_for_select(@setores || [], :id, :nome), prompt: "Selecione um setor", id: "setor_select" %>
-  </div>
+ <div class="field">
+  <%= label_tag :setor, "Setor" %>
+  <%= select_tag :setor, options_from_collection_for_select(@setors, :id, :nome), 
+    prompt: "Selecione um setor", id: "setor_select" %>
+</div>
 
-  <!-- Seleção do Funcionário (inicialmente vazio, será preenchido via JavaScript) -->
-  <div class="field">
-    <%= f.label :idfuncionario, "Funcionário" %>
-    <%= f.collection_select :idfuncionario, [], :id, :nome, prompt: "Selecione um funcionário", id: "funcionario_select" %>
-  </div>
+<div class="field">
+  <%= f.label :idfuncionario, "Funcionário" %>
+  <%= f.collection_select :idfuncionario, [], :id, :nome, prompt: "Selecione um funcionário", id: "funcionario_select" %>
+</div>
+
 
   <!-- Seleção do Visitante -->
   <div class="field">
@@ -30,64 +30,73 @@
   </div>
 
   <div class="actions">
-    <%= f.submit "Registrar Visita" %>
+    <%= f.submit "Registrar Visita 2" %>
   </div>
 <% end %>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Configuração da webcam (já existente)
-    const video = document.getElementById('webcam');
-    const canvas = document.getElementById('canvas');
-    const captureButton = document.getElementById('capture');
-    const photoPreview = document.getElementById('photo-preview');
-    const fotoBase64 = document.getElementById('foto_base64');
+document.addEventListener("DOMContentLoaded", function() {
+  // Configuração da webcam (já existente)
+  const video = document.getElementById('webcam');
+  const canvas = document.getElementById('canvas');
+  const captureButton = document.getElementById('capture');
+  const photoPreview = document.getElementById('photo-preview');
+  const fotoBase64 = document.getElementById('foto_base64');
 
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(function(stream) {
-        video.srcObject = stream;
-      })
-      .catch(function(err) {
-        console.error("Erro ao acessar a webcam: ", err);
-      });
+  // Lógica para atualizar o campo de Funcionário com base no Setor selecionado
+  const setorSelect = document.getElementById("setor_select");
+  const funcionarioSelect = document.getElementById("funcionario_select");
 
-    captureButton.addEventListener('click', function() {
-      const context = canvas.getContext('2d');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageData = canvas.toDataURL('image/png');
-      fotoBase64.value = imageData;
-      photoPreview.src = imageData;
-      photoPreview.style.display = 'block';
-    });
+  setorSelect.addEventListener("change", function() {
+    let setorId = this.value;
+    // Limpa as opções atuais
+    funcionarioSelect.innerHTML = '<option value="">Selecione um funcionário</option>';
 
-    // Lógica para atualizar o campo de Funcionário com base no Setor selecionado
-    const setorSelect = document.getElementById('setor_select');
-    const funcionarioSelect = document.getElementById('funcionario_select');
-
-    setorSelect.addEventListener('change', function() {
-      var setorId = this.value;
-      if (setorId) {
-        // Faz uma requisição para buscar os funcionários do setor (retorno em JSON)
-        fetch('/setores/' + setorId + '/funcionarios.json')
-          .then(response => response.json())
-          .then(data => {
-            // Limpa as opções atuais do select de funcionário
-            funcionarioSelect.innerHTML = '<option value="">Selecione um funcionário</option>';
-            data.forEach(function(funcionario) {
-              var option = document.createElement('option');
+    if (setorId) {
+      // Faz uma requisição para buscar os funcionários do setor (retorno em JSON)
+      fetch(`/visitas/load_funcionarios?setor_id=${setorId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.length > 0) {
+            // Para cada funcionário, cria uma nova opção no select
+            data.forEach(funcionario => {
+              let option = document.createElement("option");
               option.value = funcionario.id;
               option.textContent = funcionario.nome;
               funcionarioSelect.appendChild(option);
             });
-          })
-          .catch(error => {
-            console.error("Erro ao buscar funcionários: ", error);
-          });
-      } else {
-        funcionarioSelect.innerHTML = '<option value="">Selecione um funcionário</option>';
-      }
-    });
+          } else {
+            // Caso não haja funcionários, adiciona uma opção indicando isso
+            let option = document.createElement("option");
+            option.value = "";
+            option.textContent = "Nenhum funcionário encontrado";
+            funcionarioSelect.appendChild(option);
+          }
+        })
+        .catch(error => console.error("Erro ao buscar funcionários: ", error));
+    }
   });
+
+  // Configuração da webcam
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function(stream) {
+      video.srcObject = stream;
+    })
+    .catch(function(err) {
+      console.error("Erro ao acessar a webcam: ", err);
+    });
+
+  // Captura de foto
+  captureButton.addEventListener('click', function() {
+    const context = canvas.getContext('2d');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = canvas.toDataURL('image/png');
+    fotoBase64.value = imageData;
+    photoPreview.src = imageData;
+    photoPreview.style.display = 'block';
+  });
+});
+
 </script>

@@ -10,11 +10,11 @@
   </div>
 
   <div>
-    <%= f.label :funcionario_ids, "Funcionários" %>
-    <%= f.collection_select :funcionario_ids, User.where(role: :funcionario), :id, :nome, {}, multiple: true %>
+    <%= f.label :unidade_id, "Unidade" %>
+    <%= f.collection_select :unidade_id, Unidade.all, :id, :nome, prompt: "Selecione uma unidade", required: true %>
   </div>
 
   <div>
-    <%= f.submit "Salvar Setor" %>
+    <%= f.submit "Salvar Setor", class: "btn btn-primary" %>
   </div>
 <% end %>
