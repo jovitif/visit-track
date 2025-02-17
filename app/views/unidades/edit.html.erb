@@ -1,0 +1,16 @@
+<h1>Editar Unidade</h1>
+
+<%= form_with(model: @unidade, local: true) do |form| %>
+  <div class="mb-3">
+    <%= form.label :nome, "Nome" %>
+    <%= form.text_field :nome, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :descricao, "Descrição" %>
+    <%= form.text_area :descricao, class: "form-control" %>
+  </div>
+
+  <%= form.submit "Atualizar", class: "btn btn-success" %>
+  <%= link_to 'Cancelar', unidades_path, class: 'btn btn-secondary' %>
+<% end %>

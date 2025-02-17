@@ -1,44 +1,79 @@
 <h1>Painel do Funcionário</h1>
 
-    <% if @visitas.any? %>
-      <table>
-        <thead>
-          <tr>
-            <th>Visitante</th>
-            <th>Data/Hora de Chegada</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @visitas.each do |visita| %>
-            <tr>
+  <% if @visitas.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Foto</th>
+          <th>Visitante</th>
+          <th>Data/Hora de Chegada</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @visitas.each do |visita| %>
+          <tr id="visita_<%= visita.id %>">
             <td>
-            <% if visita.foto.present? %>
-              <img src="<%= visita.foto %>" alt="Foto do Visitante" style="max-width: 100px;">
-            <% else %>
-              Sem foto
-            <% end %>
-          </td>
-              <td><%= visita.visitante.nome %></td>
-              <td><%= visita.created_at.strftime('%d/%m/%Y %H:%M') %></td>
-              <td>
-                <% if visita.confirmado %>
-                  <span style="color: green;">Confirmada</span>
-                <% else %>
-                  <span style="color: orange;">Pendente</span>
-                <% end %>
-              </td>
-              <td>
-                <% unless visita.confirmado %>
-<%= button_to 'Confirmar Visita', confirmar_visita_path(visita), method: :patch, data: { confirm: "Confirmar a realização desta visita?" } %>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <p>Nenhuma visita agendada.</p>
-    <% end %>
-    
+              <% if visita.foto.present? %>
+                <img src="<%= visita.foto %>" alt="Foto do Visitante" class="foto-perfil">
+              <% else %>
+                Sem foto
+              <% end %>
+            </td>
+            <td><%= visita.visitante.nome %></td>
+            <td><%= visita.created_at.strftime('%d/%m/%Y %H:%M') %></td>
+            <td id="status_<%= visita.id %>">
+              <% if visita.confirmado %>
+                <span class="status-confirmado">Confirmada</span>
+              <% else %>
+                <span class="status-pendente">Pendente</span>
+              <% end %>
+            </td>
+            <td id="acao_<%= visita.id %>">
+              <% unless visita.confirmado %>
+                <%= link_to 'Confirmar Visita', confirmar_visita_path(visita), method: :patch, data: { confirm: 'Confirmar a realização desta visita?' }, class: 'btn-confirmar' %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>Nenhuma visita agendada.</p>
+  <% end %>
+  
+  
+  <style>
+    .foto-perfil {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ccc;
+    }
+  
+    .status-confirmado {
+      color: green;
+      font-weight: bold;
+    }
+  
+    .status-pendente {
+      color: orange;
+      font-weight: bold;
+    }
+  
+    .btn-confirmar {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  
+    .btn-confirmar:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  

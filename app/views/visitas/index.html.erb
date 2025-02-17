@@ -1,22 +1,28 @@
 <% if current_user && current_user.unidade.present? %>
-  <h2>Unidade: <%= current_user.unidade.nome %></h2>
+  <div class="card mt-3">
+    <div class="card-body">
+      <h2 class="card-title">Unidade: <%= current_user.unidade.nome %></h2>
 
-  <% if current_user.unidade.setors.any? %>
-    <h3>Setores Disponíveis:</h3>
-    <ul>
-      <% current_user.unidade.setors.each do |setor| %>
-        <li><%= setor.nome %></li>
+      <% if current_user.unidade.setors.any? %>
+        <h3 class="mt-3">Setores Disponíveis:</h3>
+        <ul class="list-group">
+          <% current_user.unidade.setors.each do |setor| %>
+            <li class="list-group-item"><%= setor.nome %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-muted mt-2">Não há setores cadastrados para a sua unidade.</p>
       <% end %>
-    </ul>
-  <% else %>
-    <p>Não há setores cadastrados para a sua unidade.</p>
-  <% end %>
+    </div>
+  </div>
 <% end %>
 
-<h1>Lista de Visitas</h1>
+<h1 class="mt-4">Lista de Visitas</h1>
 
-<table border="1">
-  <thead>
+<%= link_to 'Nova Visita', new_visita_path, class: "btn btn-primary mt-3" %>
+
+<table class="table table-striped table-bordered mt-3">
+  <thead class="table-dark">
     <tr>
       <th>Funcionário</th>
       <th>Visitante</th>
@@ -31,23 +37,21 @@
         <td><%= visita.funcionario.nome %></td>
         <td><%= visita.visitante.nome %></td>
         <td><%= visita.created_at.strftime("%d/%m/%Y %H:%M") %></td>
-        <td>
+        <td class="text-center">
           <% if visita.foto.present? %>
-            <img src="<%= visita.foto %>" alt="Foto do Visitante" style="max-width: 100px;">
+            <img src="<%= visita.foto %>" alt="Foto do Visitante" class="img-thumbnail" style="max-width: 80px;">
           <% else %>
-            Sem foto
+            <span class="text-muted">Sem foto</span>
           <% end %>
         </td>
         <td>
-          <%= link_to "Ver Detalhes", visita_path(visita) %>
-          |
-          <%= link_to "Excluir", visita_path(visita), method: :delete, data: { confirm: "Tem certeza?" } %>
+          <%= link_to "Ver Detalhes", visita_path(visita), class: "btn btn-info btn-sm" %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to 'Nova Visita', new_visita_path %>
+
 
 

@@ -72,13 +72,18 @@ class VisitasController < ApplicationController
   
 
   def confirmar
-    if @visita
-      @visita.update(confirmado: true)
+    puts'entrou aqui'
+    authorize! :update, @visita
+    if @visita.update(confirmado: true)
       redirect_to dashboard_funcionario_path, notice: 'Visita confirmada com sucesso!'
     else
-      redirect_to dashboard_funcionario_path, alert: 'Erro: Visita não encontrada.'
+      flash[:alert] = "Erro ao confirmar visita: #{@visita.errors.full_messages.join(', ')}"
+      redirect_to dashboard_funcionario_path
     end
   end
+  
+  
+  
 
   def anteriores
     # Buscar visitas confirmadas do funcionário atual
@@ -93,12 +98,19 @@ class VisitasController < ApplicationController
  
   private
   def ensure_atendente
-    redirect_to root_path, alert: "Acesso negado." unless current_user.atendente?
-  end
+    unless current_user.atendente? || current_user.funcionario?
+      redirect_to root_path, alert: "Acesso negado."
+    end
+    end
 
   def set_visita
-    @visita = Visita.find_by(id: params[:id]) # Use find_by para evitar exceção se o ID não existir
+    @visita = Visita.find_by(id: params[:id])
+    unless @visita
+      flash[:alert] = "Visita não encontrada."
+      redirect_to visitas_path
+    end
   end
+
   def visita_params
     params.require(:visita).permit(:setor_id, :idfuncionario, :idvisitante, :foto)
   end

@@ -1,12 +1,56 @@
 <h1>Detalhes da Visita</h1>
 
-<p><strong>Funcionário:</strong> <%= @visita.funcionario.nome %></p>
-<p><strong>Visitante:</strong> <%= @visita.visitante.nome %></p>
-<p><strong>Data e Hora:</strong> <%= @visita.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+<div class="visita-container">
+  <% if @visita.foto.present? %>
+    <div class="foto-container">
+      <img src="<%= @visita.foto %>" alt="Foto do Visitante">
+    </div>
+  <% end %>
 
-<% if @visita.foto.present? %>
-  <p><strong>Foto do Visitante:</strong></p>
-  <img src="<%= @visita.foto %>" alt="Foto do Visitante" style="max-width: 300px;">
-<% end %>
+  <div class="info-container">
+    <p><strong>Funcionário:</strong> <%= @visita.funcionario.nome %></p>
+    <p><strong>Visitante:</strong> <%= @visita.visitante.nome %></p>
+    <p><strong>Data e Hora:</strong> <%= @visita.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+  </div>
+</div>
 
-<%= link_to 'Voltar', visitas_path %>
+<a href="<%= visitas_path %>" class="btn-voltar">Voltar</a>
+
+<style>
+  .visita-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .foto-container img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #ccc;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .info-container {
+    font-size: 18px;
+  }
+
+  .btn-voltar {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+
+  .btn-voltar:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+

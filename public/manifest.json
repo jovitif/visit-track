@@ -1,0 +1,10 @@
+{
+    "name": "Visit Track",
+    "short_name": "VisitTrack",
+    "description": "Aplicação para acompanhar visitas",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4CAF50"
+  }
+  

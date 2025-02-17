@@ -16,9 +16,10 @@ class Ability
       can :read, Visitante
       can :create, Visita
       can :read, Visita
+      can :update, Visita  # Permitir que atendente atualize a visita (confirmar)
     when :funcionario
       can :read, Visita
-      can :update, Visita
+      can :update, Visita  # Permitir que funcionário atualize a visita (confirmar)
     end
   end
 end
