@@ -36,6 +36,9 @@ Rails.application.routes.draw do
   get 'dashboard/funcionario',   to: 'dashboards#funcionario'
   get 'dashboard/visitante',     to: 'dashboards#visitante'
 
+  get 'visitantes/buscar', to: 'visitantes#buscar'
+
+
   # Defines the root path route ("/")
   # root "posts#index"
   # Define a tela de login como root corretamente com devise_scope

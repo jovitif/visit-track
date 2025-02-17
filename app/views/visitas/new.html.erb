@@ -1,5 +1,5 @@
 <%= form_for @visita, url: visitas_path, html: { multipart: true } do |f| %>
-  <div class="field">
+   <div class="field">
   <%= label_tag :setor, "Setor" %>
   <%= select_tag :setor, options_from_collection_for_select(@setors || [], :id, :nome), prompt: "Selecione um setor", id: "setor_select" %>
 </div>
@@ -15,28 +15,25 @@
   <!-- Formulário para cadastro do Visitante -->
   <div class="field">
     <%= f.label :idvisitante, "Visitante" %>
-    <!-- Campos para criar novo visitante -->
+
     <%= f.fields_for :visitante do |visitante_form| %>
-       <div class="field">
+      <div class="field">
         <%= visitante_form.label :cpf, "CPF" %>
-        <%= visitante_form.text_field :cpf, placeholder: "CPF do Visitante", required: true %>
+        <%= visitante_form.text_field :cpf, placeholder: "CPF do Visitante", required: true, id: "cpf_visitante" %>
       </div>
       
       <div class="field">
         <%= visitante_form.label :nome, "Nome" %>
-        <%= visitante_form.text_field :nome, placeholder: "Nome do Visitante", required: true %>
+        <%= visitante_form.text_field :nome, placeholder: "Nome do Visitante", required: true, id: "nome_visitante" %>
       </div>
-
-     
 
       <div class="field">
         <%= visitante_form.label :telefone, "Telefone" %>
-        <%= visitante_form.text_field :telefone, placeholder: "Telefone do Visitante", required: true %>
+        <%= visitante_form.text_field :telefone, placeholder: "Telefone do Visitante", required: true, id: "telefone_visitante" %>
       </div>
     <% end %>
   </div>
 
-  <!-- Captura de Foto -->
   <div class="field">
     <%= f.label :foto, "Foto do visitante" %>
     <input type="hidden" name="visita[foto]" id="foto_base64">
@@ -53,17 +50,13 @@
   </div>
 <% end %>
 
-
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  // Referências aos elementos da página
   const setorSelect = document.getElementById("setor_select");
   const funcionarioSelect = document.getElementById("funcionario_select");
-  const video = document.getElementById('webcam');
-  const canvas = document.getElementById('canvas');
-  const captureButton = document.getElementById('capture');
-  const photoPreview = document.getElementById('photo-preview');
-  const fotoBase64 = document.getElementById('foto_base64');
+  const cpfVisitanteInput = document.getElementById("cpf_visitante");
+  const nomeVisitanteInput = document.getElementById("nome_visitante");
+  const telefoneVisitanteInput = document.getElementById("telefone_visitante");
 
   // Carregar funcionários quando o setor for alterado
   setorSelect.addEventListener("change", function() {
@@ -99,13 +92,43 @@ document.addEventListener("DOMContentLoaded", function() {
         .catch(error => console.error("Erro ao buscar funcionários:", error));
     }
   });
+  
+  // Buscar visitante ao sair do campo CPF
+  cpfVisitanteInput.addEventListener("blur", function() {
+    let cpf = cpfVisitanteInput.value.trim();
+    if (cpf.length < 11) return;
 
-  // Ativar webcam
+    fetch(`/visitantes/buscar?cpf=${cpf}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.encontrado) {
+          nomeVisitanteInput.value = data.nome;
+          telefoneVisitanteInput.value = data.telefone;
+
+          nomeVisitanteInput.setAttribute("readonly", true);
+          telefoneVisitanteInput.setAttribute("readonly", true);
+        } else {
+          nomeVisitanteInput.value = "";
+          telefoneVisitanteInput.value = "";
+
+          nomeVisitanteInput.removeAttribute("readonly");
+          telefoneVisitanteInput.removeAttribute("readonly");
+        }
+      })
+      .catch(error => console.error("Erro ao buscar visitante:", error));
+  });
+
+  // Captura de foto
+  const video = document.getElementById('webcam');
+  const canvas = document.getElementById('canvas');
+  const captureButton = document.getElementById('capture');
+  const photoPreview = document.getElementById('photo-preview');
+  const fotoBase64 = document.getElementById('foto_base64');
+
   navigator.mediaDevices.getUserMedia({ video: true })
     .then(stream => video.srcObject = stream)
     .catch(err => console.error("Erro ao acessar a webcam:", err));
 
-  // Captura de foto do visitante
   captureButton.addEventListener('click', function() {
     const context = canvas.getContext('2d');
     canvas.width = video.videoWidth;
@@ -118,5 +141,5 @@ document.addEventListener("DOMContentLoaded", function() {
     photoPreview.style.display = 'block';
   });
 });
-
 </script>
+

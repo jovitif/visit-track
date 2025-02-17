@@ -18,6 +18,13 @@
 <h1 style="color: #D62839; text-align: center;">Painel de Administrador</h1>
 <p style="text-align: center;">Bem-vindo ao painel de administração, <%= current_user.nome %>!</p>
 
+<div>
+  <h3>Visitas Marcadas: <%= @visitas_marcadas.count %></h3>
+  <h3>Visitas Confirmadas: <%= @visitas_confirmadas.count %></h3>
+  <h3>Total de Visitas: <%= @total_visitas %></h3> <!-- Total de visitas -->
+</div>
+
+
 <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
   <%= link_to unidades_path, style: "text-decoration: none; color: inherit;" do %>
     <div class="menu-item">

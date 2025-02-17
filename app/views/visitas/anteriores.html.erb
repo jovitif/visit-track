@@ -1,21 +1,29 @@
 <h1>Visitas Anteriores</h1>
 
-<% if @visitas.any? %>
+<% if @visitas_anteriores.any? %>
   <table>
     <thead>
       <tr>
+        <th>Foto</th>
         <th>Visitante</th>
         <th>Data/Hora de Chegada</th>
         <th>Status</th>
       </tr>
     </thead>
     <tbody>
-      <% @visitas.each do |visita| %>
+      <% @visitas_anteriores.each do |visita| %>
         <tr>
+          <td>
+            <% if visita.foto.present? %>
+              <img src="<%= visita.foto %>" alt="Foto do Visitante" class="foto-perfil">
+            <% else %>
+              Sem foto
+            <% end %>
+          </td>
           <td><%= visita.visitante.nome %></td>
           <td><%= visita.created_at.strftime('%d/%m/%Y %H:%M') %></td>
           <td>
-            <span style="color: green;">Confirmada</span>
+            <span class="status-confirmado">Confirmada</span>
           </td>
         </tr>
       <% end %>

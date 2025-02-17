@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @usuarios.each do |usuario| %>
+    <% @usuarios.reject { |usuario| usuario.role == "visitante" }.each do |usuario| %>
       <tr>
         <td><%= usuario.nome %></td>
         <td><%= usuario.email %></td>
@@ -31,10 +31,11 @@
         </td>
         <td>
           <% unless usuario.role == "administrador" %>
-<%= link_to 'Editar', edit_funcionario_path(usuario), class: 'btn btn-warning' %>
+            <%= link_to 'Editar', edit_funcionario_path(usuario), class: 'btn btn-warning' %>
           <% end %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
+

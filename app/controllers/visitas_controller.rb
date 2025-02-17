@@ -19,48 +19,37 @@ class VisitasController < ApplicationController
   
 
   def create
-    # Captura os dados do visitante a partir dos parâmetros aninhados
     visitante_params = params.require(:visita).permit(visitante: [:nome, :cpf, :telefone])
     visitante_data = visitante_params[:visitante]
   
-    # Gerar um email dummy a partir do CPF (removendo caracteres não numéricos)
-    dummy_email = "#{visitante_data[:cpf].gsub(/\D/, '')}@example.com"
-    # Gerar uma senha aleatória
-    random_password = SecureRandom.hex(8)
+    visitante = User.find_by(cpf: visitante_data[:cpf])
   
-    # Tenta encontrar o visitante pelo CPF ou cria um novo
-    visitante = User.find_by(cpf: visitante_data[:cpf]) || User.create(
-      nome:     visitante_data[:nome],
-      cpf:      visitante_data[:cpf],
-      telefone: visitante_data[:telefone],
-      role:     :visitante,
-      email:    dummy_email,
-      password: random_password,
-      password_confirmation: random_password
-    )
+    if visitante.nil?
+      dummy_email = "#{visitante_data[:cpf].gsub(/\D/, '')}@example.com"
+      random_password = SecureRandom.hex(8)
   
-    # Criação da visita
-    @visita = Visita.new(visita_params)
-    
-    # Associa o visitante à visita
-    @visita.visitante = visitante
-  
-    # O funcionário selecionado vem do parâmetro :idfuncionario (via select_tag)
-    if params[:idfuncionario].present?
-      @visita.idfuncionario = params[:idfuncionario]
+      visitante = User.create(
+        nome: visitante_data[:nome],
+        cpf: visitante_data[:cpf],
+        telefone: visitante_data[:telefone],
+        role: :visitante,
+        email: dummy_email,
+        password: random_password,
+        password_confirmation: random_password
+      )
     end
   
-    puts "==== Visitante: #{visitante.inspect}"
-    puts "==== Visita (antes de salvar): #{@visita.inspect}"
+    @visita = Visita.new(visita_params)
+    @visita.visitante = visitante
+    @visita.idfuncionario = params[:idfuncionario] if params[:idfuncionario].present?
   
     if @visita.save
       redirect_back fallback_location: visitas_path, notice: "Visita registrada com sucesso!"
     else
-      puts "==== Erros ao salvar visita: #{@visita.errors.full_messages}"
       render :new
     end
-  end  
-    
+  end
+      
   
   def show
     @visita = Visita.find_by(id: params[:id])
@@ -86,9 +75,9 @@ class VisitasController < ApplicationController
   
 
   def anteriores
-    # Buscar visitas confirmadas do funcionário atual
-    @visitas = Visita.where(funcionario_id: current_user.id, confirmado: true).order(created_at: :desc)
+    @visitas_anteriores = Visita.where(idfuncionario: current_user.id, confirmado: true).order(created_at: :desc)
   end
+  
 
   def load_funcionarios
     setor_id = params[:setor_id]

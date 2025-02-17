@@ -1,0 +1,40 @@
+<h1>Editar Usuário</h1>
+
+<%= form_for(@usuario, url: usuarios_path(@usuario), method: :patch) do |f| %>
+  <div>
+    <%= f.label :nome %>
+    <%= f.text_field :nome, value: @usuario.nome %>
+  </div>
+
+  <div>
+    <%= f.label :email %>
+    <%= f.email_field :email, value: @usuario.email %>
+  </div>
+
+  <div>
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+  </div>
+
+  <div>
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation %>
+  </div>
+
+  <div>
+    <%= f.label :cpf %>
+    <%= f.text_field :cpf, value: @usuario.cpf %>
+  </div>
+
+  <div>
+    <%= f.label :telefone %>
+    <%= f.text_field :telefone, value: @usuario.telefone %>
+  </div>
+
+  <div>
+    <%= f.label :role, "Função" %>
+    <%= f.select :role, User.roles.keys.reject { |role| role == 'visitante' }.map { |role| [role.humanize, role] }, selected: @usuario.role %>
+  </div>
+
+  <%= f.submit "Atualizar Usuário" %>
+<% end %>

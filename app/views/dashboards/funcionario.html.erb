@@ -1,5 +1,7 @@
 <h1>Painel do Funcionário</h1>
 
+  <%= link_to 'Ver Visitas Anteriores', anteriores_visitas_path, class: 'btn-anteriores' %>
+
   <% if @visitas.any? %>
     <table>
       <thead>
@@ -75,5 +77,20 @@
     .btn-confirmar:hover {
       background-color: #0056b3;
     }
+
+    .btn-anteriores {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.btn-anteriores:hover {
+  background-color: #218838;
+}
+
   </style>
   

@@ -1,6 +1,6 @@
 <h1>Cadastrar Novo Usuário 2</h1>
 
-<%= form_for(resource, url: user_registration_path) do |f| %>
+<%= form_for(@usuario, url: usuarios_path, method: :post) do |f| %>
   <div>
     <%= f.label :nome %>
     <%= f.text_field :nome %>
