@@ -7,6 +7,9 @@
     <tr>
       <th>Nome</th>
       <th>Descrição</th>
+      <th>Setores</th>
+      <th>Atendentes</th>
+      <th>Funcionários</th>
       <th>Ações</th>
     </tr>
   </thead>
@@ -16,6 +19,42 @@
         <td><%= unidade.nome %></td>
         <td><%= unidade.descricao %></td>
         <td>
+          <% setores = Setor.where(unidade_id: unidade.id) %>
+          <% if setores.any? %>
+            <ul>
+              <% setores.each do |setor| %>
+                <li><%= setor.nome %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p>Sem setores</p>
+          <% end %>
+        </td>
+        <td>
+          <% atendentes = User.where(role: 'atendente', unidade_id: unidade.id) %>
+          <% if atendentes.any? %>
+            <ul>
+              <% atendentes.each do |atendente| %>
+                <li><%= atendente.nome %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p>Sem atendentes</p>
+          <% end %>
+        </td>
+        <td>
+          <% funcionarios = User.where(role: 'funcionario', unidade_id: unidade.id) %>
+          <% if funcionarios.any? %>
+            <ul>
+              <% funcionarios.each do |funcionario| %>
+                <li><%= funcionario.nome %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p>Sem funcionários</p>
+          <% end %>
+        </td>
+        <td>
           <%= link_to 'Editar', edit_unidade_path(unidade), class: 'btn btn-warning btn-sm' %>
           <%= link_to 'Excluir', unidade_path(unidade), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'btn btn-danger btn-sm' %>
         </td>
@@ -23,4 +62,3 @@
     <% end %>
   </tbody>
 </table>
-

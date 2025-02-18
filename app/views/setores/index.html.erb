@@ -7,6 +7,7 @@
     <tr>
       <th>Nome</th>
       <th>Descrição</th>
+      <th>Unidade</th>
       <th>Funcionários</th>
       <th>Ações</th>
     </tr>
@@ -16,15 +17,17 @@
       <tr>
         <td><%= setor.nome %></td>
         <td><%= setor.descricao %></td>
+        <td><%= setor.unidade&.nome || 'Sem unidade' %></td>
         <td>
-          <% if setor.funcionarios.any? %>
-            <ul class="list-unstyled">
-              <% setor.funcionarios.each do |funcionario| %>
+          <% funcionarios = User.where(role: 'funcionario', setor_id: setor.id) %>
+          <% if funcionarios.any? %>
+            <ul>
+              <% funcionarios.each do |funcionario| %>
                 <li><%= funcionario.nome %></li>
               <% end %>
             </ul>
           <% else %>
-            Nenhum funcionário
+            <p>Sem funcionários</p>
           <% end %>
         </td>
         <td>
