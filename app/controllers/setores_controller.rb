@@ -29,7 +29,7 @@ class SetoresController < ApplicationController
 
   def update
     if @setor.update(setor_params)
-      redirect_to @setor, notice: 'Setor atualizado com sucesso!'
+      redirect_to setore_path(@setor), notice: 'Setor atualizado com sucesso!'
     else
       render :edit
     end

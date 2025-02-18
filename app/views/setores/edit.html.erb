@@ -1,6 +1,23 @@
 <h1>Editar Setor</h1>
 
-<%= render 'form', setor: @setor %>
+<%= form_with(model: @setor, url: setore_path(@setor), method: :patch, local: true) do |form| %>
+  <div class="mb-3">
+    <%= form.label :nome, "Nome" %>
+    <%= form.text_field :nome, class: "form-control" %>
+  </div>
 
-<%= link_to 'Voltar', setores_path %>
+  <div class="mb-3">
+    <%= form.label :descricao, "Descrição" %>
+    <%= form.text_area :descricao, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :unidade_id, "Unidade" %>
+    <%= form.collection_select :unidade_id, Unidade.all, :id, :nome, prompt: "Selecione uma unidade", class: "form-control" %>
+  </div>
+
+  <%= form.submit "Atualizar", class: "btn btn-success" %>
+  <%= link_to 'Cancelar', setores_path, class: 'btn btn-secondary' %>
+<% end %>
+
 

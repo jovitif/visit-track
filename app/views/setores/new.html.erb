@@ -1,5 +1,24 @@
 <h1>Novo Setor</h1>
 
-<%= render 'form', setor: @setor %>
+<%= form_with(model: @setor, url: setores_path) do |form| %>
+  <div>
+    <%= form.label :nome %>
+    <%= form.text_field :nome, required: true %>
+  </div>
 
-<%= link_to 'Voltar', setores_path %>
+  <div>
+    <%= form.label :descricao %>
+    <%= form.text_area :descricao, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :unidade_id, "Unidade" %>
+    <%= form.collection_select :unidade_id, Unidade.all, :id, :nome, prompt: "Selecione uma unidade", required: true %>
+  </div>
+
+  <div>
+    <%= form.submit "Criar Setor", class: "btn btn-success" %>
+  </div>
+<% end %>
+
+<%= link_to 'Voltar', setores_path, class: 'btn btn-secondary' %>

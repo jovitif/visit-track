@@ -1,6 +1,8 @@
-<h1>Setores</h1>
+<h1>Lista de Setores</h1>
 
-<table border="1">
+<%= link_to 'Novo Setor', new_setore_path, class: 'btn btn-primary' %>
+
+<table class="table table-striped mt-3">
   <thead>
     <tr>
       <th>Nome</th>
@@ -15,18 +17,21 @@
         <td><%= setor.nome %></td>
         <td><%= setor.descricao %></td>
         <td>
-          <% setor.funcionarios.each do |funcionario| %>
-            <%= funcionario.nome %> <br>
+          <% if setor.funcionarios.any? %>
+            <ul class="list-unstyled">
+              <% setor.funcionarios.each do |funcionario| %>
+                <li><%= funcionario.nome %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            Nenhum funcionário
           <% end %>
         </td>
         <td>
-        <%= link_to "Ver", setore_path(setor) %> |
-        <%= link_to "Editar", edit_setore_path(setor) %> |
-        <%= link_to "Excluir", setore_path(setor), method: :delete, data: { confirm: "Tem certeza?" } %>
-                </td>
+          <%= link_to 'Editar', edit_setore_path(setor), class: 'btn btn-warning btn-sm' %>
+          <%= link_to 'Excluir', setore_path(setor), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'btn btn-danger btn-sm' %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<%= link_to 'Novo Setor', new_setore_path %>
