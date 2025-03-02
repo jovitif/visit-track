@@ -1,41 +1,44 @@
-<h1>Cadastrar Novo Usuário 2</h1>
+<h1>Novo Usuário</h1>
+
+<p>Preencha os campos abaixo para criar um novo usuário.</p>
 
 <%= form_for(@usuario, url: usuarios_path, method: :post) do |f| %>
-  <div>
-    <%= f.label :nome %>
-    <%= f.text_field :nome %>
+  <div class="form-group">
+    <%= f.label :nome, class: "form-label" %>
+    <%= f.text_field :nome, class: "form-control" %>
   </div>
 
-  <div>
-    <%= f.label :email %>
-    <%= f.email_field :email %>
+  <div class="form-group">
+    <%= f.label :email, class: "form-label" %>
+    <%= f.email_field :email, class: "form-control" %>
   </div>
 
-  <div>
-    <%= f.label :password %>
-    <%= f.password_field :password %>
+  <div class="form-group">
+    <%= f.label :password, class: "form-label" %>
+    <%= f.password_field :password, class: "form-control" %>
   </div>
 
-  <div>
-    <%= f.label :password_confirmation %>
-    <%= f.password_field :password_confirmation %>
+  <div class="form-group">
+    <%= f.label :password_confirmation, class: "form-label" %>
+    <%= f.password_field :password_confirmation, class: "form-control" %>
   </div>
 
-  <div>
-    <%= f.label :cpf %>
-    <%= f.text_field :cpf %>
+  <div class="form-group">
+    <%= f.label :cpf, class: "form-label" %>
+    <%= f.text_field :cpf, class: "form-control" %>
   </div>
 
-  <div>
-    <%= f.label :telefone %>
-    <%= f.text_field :telefone %>
+  <div class="form-group">
+    <%= f.label :telefone, class: "form-label" %>
+    <%= f.text_field :telefone, class: "form-control" %>
   </div>
 
-  <div>
-  <%= f.label :role, "Função" %>
-  <%= f.select :role, User.roles.keys.reject { |role| role == 'visitante' }.map { |role| [role.humanize, role] } %>
-</div>
+  <div class="form-group">
+    <%= f.label :role, "Função", class: "form-label" %>
+    <%= f.select :role, User.roles.keys.reject { |role| role == 'visitante' }.map { |role| [role.humanize, role] }, {}, class: "form-control" %>
+  </div>
 
-
-  <%= f.submit "Cadastrar Usuário" %>
+  <div class="form-group text-center">
+    <%= f.submit "Prosseguir", class: "btn btn-primary" %>
+  </div>
 <% end %>

@@ -2,7 +2,8 @@ class UnidadesController < ApplicationController
   before_action :set_unidade, only: %i[edit update destroy]
 
   def index
-    @unidades = Unidade.all
+    @unidades = Unidade.page(params[:page]).per(10)
+
   end
 
   def new

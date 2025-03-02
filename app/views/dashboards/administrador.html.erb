@@ -1,56 +1,14 @@
-<style>
-  .menu-item {
-    text-align: center;
-    padding: 15px;
-    border-radius: 10px;
-    background: #1E222D;
-    width: 150px;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .menu-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  }
-</style>
+<div style="
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ocupa toda a altura da tela */
+  text-align: center;
+">
+  <!-- Imagem do museu -->
+  <img src="<%= asset_path('museu.png') %>" alt="Museu" style="max-width: 100px; height: 100px;">
 
-<h1 style="color: #D62839; text-align: center;">Painel de Administrador</h1>
-<p style="text-align: center;">Bem-vindo ao painel de administração, <%= current_user.nome %>!</p>
-
-<div>
-  <h3>Visitas Marcadas: <%= @visitas_marcadas.count %></h3>
-  <h3>Visitas Confirmadas: <%= @visitas_confirmadas.count %></h3>
-  <h3>Total de Visitas: <%= @total_visitas %></h3> <!-- Total de visitas -->
-</div>
-
-
-<div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-  <%= link_to unidades_path, style: "text-decoration: none; color: inherit;" do %>
-    <div class="menu-item">
-      <img src="<%= asset_path('unidades.png') %>" alt="Unidades" style="width: 100px; height: auto;">
-      <h3 style="color: #D62839; margin-top: 10px;">Unidades</h3>
-    </div>
-  <% end %>
-
-  <%= link_to setores_path, style: "text-decoration: none; color: inherit;" do %>
-    <div class="menu-item">
-      <img src="<%= asset_path('setores.png') %>" alt="Setores" style="width: 100px; height: auto;">
-      <h3 style="color: #D62839; margin-top: 10px;">Setores</h3>
-    </div>
-  <% end %>
-
-  <%= link_to funcionarios_path, style: "text-decoration: none; color: inherit;" do %>
-    <div class="menu-item">
-      <img src="<%= asset_path('funcionarios.png') %>" alt="Funcionários" style="width: 100px; height: auto;">
-      <h3 style="color: #D62839; margin-top: 10px;">Funcionários</h3>
-    </div>
-  <% end %>
-
-  <%= link_to usuarios_path, style: "text-decoration: none; color: inherit;" do %>
-    <div class="menu-item">
-      <img src="<%= asset_path('usuarios.png') %>" alt="Usuários" style="width: 100px; height: auto;">
-      <h3 style="color: #D62839; margin-top: 10px;">Usuários</h3>
-    </div>
-  <% end %>
+  <h1 style="color: #D62839;">Seja bem-vindo(a) ao painel administrativo do Visit Track!</h1>
+  <p>Navegue pelos itens no menu</p>
 </div>

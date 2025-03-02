@@ -1,6 +1,9 @@
-<h1>Usuários</h1>
+<div class="header-container">
+  <h1>Usuários</h1>
+  <%= link_to 'Adicionar +', new_usuario_path, class: 'btn btn-primary' %>
+</div>
 
-<%= link_to 'Adicionar Usuário', new_usuario_path, class: 'btn btn-primary' %>
+<p>Para criar um novo usuário, clique no botão “Adicionar +”.</p>
 
 <table>
   <thead>
@@ -15,20 +18,30 @@
   </thead>
   <tbody>
     <% @usuarios.each do |usuario| %>
-      <% unless usuario.role == 'visitante' %>
-        <tr>
-          <td><%= usuario.nome %></td>
-          <td><%= usuario.email %></td>
-          <td><%= usuario.cpf %></td>
-          <td><%= usuario.telefone %></td>
-          <td><%= usuario.role %></td>
-          <td>
-            <%= link_to 'Editar', edit_usuario_path(usuario), class: 'btn btn-warning' %>
-            <%= link_to 'Excluir', usuario_path(usuario), method: :delete, data: { confirm: 'Tem certeza que deseja excluir este usuário?' }, class: 'btn btn-danger' %>
-          </td>
-        </tr>
-      <% end %>
+      <tr>
+        <td><%= usuario.nome %></td>
+        <td><%= usuario.email %></td>
+        <td><%= usuario.cpf %></td>
+        <td><%= usuario.telefone %></td>
+        <td><%= usuario.role %></td>
+        <td>
+        <%= link_to edit_usuario_path(usuario), class: 'btn btn-warning' do %>
+          <i class="fas fa-edit"></i> <!-- Ícone de edição -->
+        <% end %>
+      
+        <%= link_to usuario_path(usuario), method: :delete, data: { confirm: 'Tem certeza que deseja excluir este usuário?' }, class: 'btn btn-danger' do %>
+          <i class="fas fa-trash"></i> <!-- Ícone de lixeira -->
+        <% end %>
+      </td>
+      
+      </tr>
     <% end %>
   </tbody>
 </table>
+
+<!-- Adiciona a paginação -->
+<div class="pagination">
+  <%= paginate @usuarios %>
+</div>
+
 

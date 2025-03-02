@@ -3,7 +3,7 @@ class UsuariosController < ApplicationController
     before_action :set_usuario, only: [:edit, :update]
 
     def index
-      @usuarios = User.all
+      @usuarios = User.where.not(role: 'visitante').page(params[:page]).per(10)
     end
 
     def new

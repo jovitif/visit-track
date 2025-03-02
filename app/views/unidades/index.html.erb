@@ -1,6 +1,9 @@
-<h1>Lista de Unidades</h1>
+<div class="header-container">
+  <h1>Unidades</h1>
+  <%= link_to 'Adicionar +', new_unidade_path, class: 'btn btn-primary' %>
+</div>
 
-<%= link_to 'Nova Unidade', new_unidade_path, class: 'btn btn-primary' %>
+<p>Para criar uma nova unidade, clique no botão “Adicionar +”.</p>
 
 <table class="table table-striped mt-3">
   <thead>
@@ -55,10 +58,21 @@
           <% end %>
         </td>
         <td>
-          <%= link_to 'Editar', edit_unidade_path(unidade), class: 'btn btn-warning btn-sm' %>
-          <%= link_to 'Excluir', unidade_path(unidade), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'btn btn-danger btn-sm' %>
-        </td>
+        <%= link_to edit_unidade_path(unidade), class: 'btn btn-warning btn-sm' do %>
+          <i class="fas fa-edit"></i>
+        <% end %>
+      
+        <%= link_to unidade_path(unidade), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'btn btn-danger btn-sm' do %>
+          <i class="fas fa-trash"></i>
+        <% end %>
+      </td>
+      
       </tr>
     <% end %>
   </tbody>
 </table>
+
+<!-- PAGINAÇÃO -->
+<div class="pagination">
+  <%= paginate @unidades %>
+</div>

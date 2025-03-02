@@ -1,6 +1,10 @@
-<h1>Lista de Setores</h1>
+<div class="header-container">
+  <h1>Setores</h1>
+<%= link_to 'Adicionar +', new_setore_path, class: 'btn btn-primary' %>
+</div>
 
-<%= link_to 'Novo Setor', new_setore_path, class: 'btn btn-primary' %>
+<p>Para criar um novo setor, clique no botão “Adicionar +”.</p>
+
 
 <table class="table table-striped mt-3">
   <thead>
@@ -31,9 +35,15 @@
           <% end %>
         </td>
         <td>
-          <%= link_to 'Editar', edit_setore_path(setor), class: 'btn btn-warning btn-sm' %>
-          <%= link_to 'Excluir', setore_path(setor), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'btn btn-danger btn-sm' %>
-        </td>
+        <%= link_to edit_setore_path(setor), class: 'btn btn-warning btn-sm' do %>
+          <i class="fas fa-edit"></i>
+        <% end %>
+        
+        <%= link_to setore_path(setor), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'btn btn-danger btn-sm' do %>
+          <i class="fas fa-trash"></i>
+        <% end %>
+      </td>
+      
       </tr>
     <% end %>
   </tbody>
